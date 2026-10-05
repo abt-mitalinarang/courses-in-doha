@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@source "../../../../apps/**/*.{tsx,ts,jsx,js}";
+@source "../../../../packages/**/*.{tsx,ts,jsx,js}";
+@source "../../**/*.{tsx,ts,jsx,js}";
+
+:root {
+  --background: #fdfbfb;
+  --foreground: rgb(22, 22, 22);
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #204fbe;
+  --primary-foreground: #f8fafc;
+
+  --secondary: #000000;
+  --secondary-foreground: #0f172a;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #36383b;
+  --input: #e2e8f0;
+  --ring: #94a3b8;
+
+  --radius: 0.5rem;
+}
