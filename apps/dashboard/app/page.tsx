@@ -1,17 +1,16 @@
 "use client"
+import Toolbar from "@/components/tool-bar"
+import { IHeroDetails } from "@repo/core"
 import { Hero } from "@repo/registry"
 import { getHeroDetails, updateHeroDetailsCookie } from "@repo/registry/actions"
 import { Button } from "@repo/ui/components/button"
-import { Input } from "@repo/ui/components/input"
-import { Label } from "@repo/ui/components/label"
-import { Switch } from "@repo/ui/components/switch"
+import { toast } from "@repo/ui/components/sonner"
 import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
   ChevronDown,
   ChevronRight,
-  ChevronUp,
   ExternalLink,
   Globe,
   GripHorizontal,
@@ -25,12 +24,11 @@ import {
   Trash2,
 } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Toast } from "@repo/ui/components/sonner"
 
 export default function Page() {
-  const [heroDetails, setHeroDetails] = useState({
-    title: "fdf",
-    Subtitle: "retes",
+  const [heroDetails, setHeroDetails] = useState<IHeroDetails>({
+    title: "",
+    subTitle: "",
     CTA: [],
     trustStats: [],
   })
@@ -45,7 +43,12 @@ export default function Page() {
     getDetails()
   }, [])
   const updateCookies = async () => {
-    await updateHeroDetailsCookie(heroDetails)
+    try {
+      await updateHeroDetailsCookie(heroDetails)
+      toast.success("Page published successfully")
+    } catch (error) {
+      toast.error("Failed to publish page")
+    }
   }
   const SectionActions = () => {
     const actions = [
@@ -79,6 +82,7 @@ export default function Page() {
       </div>
     )
   }
+
   return (
     <div className="flex h-screen w-full flex-col bg-[#F9FAFB]">
       <header className="flex h-12 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4">
@@ -204,9 +208,10 @@ export default function Page() {
               <SectionActions />
               <Hero
                 title={heroDetails?.title}
-                subTitle={heroDetails?.Subtitle}
+                subTitle={heroDetails?.subTitle}
                 CTA={heroDetails?.CTA}
                 trustStats={heroDetails?.trustStats}
+                showStats={showStats}
               />
             </div>
 
@@ -240,10 +245,10 @@ export default function Page() {
               <div className="flex h-56 gap-6 bg-[#FAF6F3] p-8">
                 <div className="h-full w-2/5 overflow-hidden rounded-lg bg-gray-200">
                   <Hero
-                    title={heroDetails.title}
-                    subTitle={heroDetails.Subtitle}
-                    CTA={heroDetails.CTA}
-                    trustStats={heroDetails.trustStats}
+                    title={heroDetails?.title || ""}
+                    subTitle={heroDetails?.subTitle || ""}
+                    CTA={heroDetails?.CTA || []}
+                    trustStats={heroDetails?.trustStats || []}
                     showStats={showStats}
                   />
                 </div>
@@ -262,137 +267,12 @@ export default function Page() {
             </div>
           </div>
         </div>
-
-        <div className="flex w-[340px] flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
-          <div className="flex border-b border-gray-100">
-            <Button className="flex-1 border-b-2 border-transparent px-4 py-3 text-sm font-medium text-gray-500 transition-colors hover:text-gray-700">
-              Details
-            </Button>
-          </div>
-
-          <div className="custom-scrollbar flex-1 overflow-y-auto p-5">
-            <div className="space-y-6">
-              <div>
-                <div className="mb-2 flex w-fit rounded bg-gray-100 p-0.5">
-                  <Button className="rounded bg-white px-3 py-1 text-[10px] font-medium text-gray-900 shadow-sm">
-                    En
-                  </Button>
-                  <Button className="rounded px-3 py-1 text-[10px] font-medium text-gray-500 hover:text-gray-900">
-                    Ar
-                  </Button>
-                </div>
-                <textarea
-                  rows={6}
-                  className="w-full resize-none rounded-md border border-gray-200 px-3 py-2 text-[11px] leading-relaxed text-gray-700 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none"
-                  defaultValue="Discover Ashraf & Co., a trusted business group with decades of quality leadership, strong customer support, and expertise across healthcare, technology, media, imaging, and industrial solutions."
-                ></textarea>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-xs font-semibold text-gray-700">
-                    Title
-                  </Label>
-                  <Input
-                    value={heroDetails?.title || ""}
-                    onChange={(e) =>
-                      setHeroDetails({ ...heroDetails, title: e.target.value })
-                    }
-                    className="mt-1.5 w-full bg-white text-sm"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-semibold text-gray-700">
-                    Subtitle
-                  </Label>
-                  <Input
-                    value={heroDetails?.Subtitle || ""}
-                    onChange={(e) =>
-                      setHeroDetails({
-                        ...heroDetails,
-                        Subtitle: e.target.value,
-                      })
-                    }
-                    className="mt-1.5 w-full bg-white text-sm"
-                  />
-                </div>
-                <div className="space-y-4 border-t border-gray-100 pt-4">
-                  {heroDetails?.CTA?.map((cta, index) => (
-                    <div key={index} className="flex items-end gap-2">
-                      <div className="flex-1">
-                        <Label className="text-[10px] text-gray-500">
-                          Label
-                        </Label>
-                        <Input
-                          value={cta?.key}
-                          onChange={(e) => setHeroDetails((prev) => prev)}
-                          className="mt-1 h-8 w-full bg-white text-xs"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <Label className="text-[10px] text-gray-500">
-                          Href
-                        </Label>
-                        <Input
-                          value={cta.value || ""}
-                          onChange={(e) => {}}
-                          className="mt-1 h-8 w-full bg-white text-xs"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-3">
-                  <div className="flex gap-3">
-                    <div className="space-y-1">
-                      <Label
-                        htmlFor="trust-stats"
-                        className="cursor-pointer text-xs font-semibold text-gray-900"
-                      >
-                        Trust Stats
-                      </Label>
-                    </div>
-                  </div>
-                  <Switch
-                    className={"[data-selected]-bg-black"}
-                    id="trust-stats"
-                    checked={showStats}
-                    onCheckedChange={() => setShowStats(!showStats)}
-                  />
-                </div>
-              </div>
-              <div className="border-t border-gray-100 pt-6">
-                <div className="mb-2 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-gray-900">
-                    Page SEO
-                  </h3>
-                  <ChevronUp className="h-4 w-4 text-gray-500" />
-                </div>
-                <p className="mb-5 text-[11px] text-gray-500">
-                  Metadata used by search engines
-                  <br />
-                  and social previews.
-                </p>
-
-                <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700">
-                    Page Meta Title
-                  </label>
-                  <div className="mb-2 flex w-fit rounded bg-gray-100 p-0.5">
-                    <Button className="rounded bg-white px-3 py-1 text-[10px] font-medium text-gray-900 shadow-sm">
-                      En
-                    </Button>
-                    <Button className="rounded px-3 py-1 text-[10px] font-medium text-gray-500 hover:text-gray-900">
-                      Ar
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Toolbar
+          heroDetails={heroDetails}
+          setHeroDetails={setHeroDetails}
+          showStats={showStats}
+          setShowStats={setShowStats}
+        />
       </div>
     </div>
   )

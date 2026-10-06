@@ -1,5 +1,5 @@
 {
-  "name": "@repo/registry",
+  "name": "@repo/core",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -9,29 +9,23 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
     "@tanstack/react-table": "^9.2.5",
-    "@repo/core": "workspace:*",
-    "lucide-react": "^1.52.0",
     "next": "16.3.6",
-    "next-themes": "^0.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4",
     "@turbo/gen": "^2.11.5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^10",
-    "tailwindcss": "^4",
     "typescript": "^5"
   },
   "exports": {
     ".": "./src/index.ts",
-    "./actions": "./src/actions.ts"
+    "./interface/*": "./src/interface/*"
   }
 }

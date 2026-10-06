@@ -1,12 +1,9 @@
 import { Button } from "@repo/ui/components/button"
 import Image from "next/image"
 import heroImage from "@repo/ui/assests/heroimg.avif"
+import { IHeroDetails } from "@repo/core"
 
-interface IHeroProps {
-  title: string
-  subTitle: string
-  CTA: { label: string; href: string }[]
-  trustStats: { key: string; value: string }[]
+interface IHeroProps extends IHeroDetails {
   showStats?: boolean
 }
 export default function Hero({
@@ -16,6 +13,7 @@ export default function Hero({
   trustStats,
   showStats,
 }: IHeroProps) {
+  console.log(showStats, trustStats, showStats && trustStats?.length > 0)
   return (
     <section className="relative mx-auto mt-4 mb-24 w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
       <div className="relative flex h-[600px] w-full overflow-hidden rounded-4xl bg-[#ebe7e4]">
@@ -25,16 +23,20 @@ export default function Hero({
           </h1>
           <p className="mb-10 max-w-md text-lg text-white">{subTitle}</p>
           <div className="flex flex-wrap items-center gap-4">
-            {CTA?.map((item, index) => {
-              return (
-                <Button
-                  key={index}
-                  className="rounded-full bg-purple-700 px-8 py-6 text-base text-white hover:bg-purple-800"
-                >
-                  {item.label}
-                </Button>
-              )
-            })}
+            {CTA?.length > 0 &&
+              CTA?.map((item, index) => {
+                console.log(item?.label)
+                if (item?.label != "" && item?.label != undefined) {
+                  return (
+                    <Button
+                      key={index}
+                      className="rounded-full bg-purple-700 px-8 py-6 text-base text-white hover:bg-purple-800"
+                    >
+                      {item.label}
+                    </Button>
+                  )
+                }
+              })}
           </div>
         </div>
 
@@ -47,11 +49,12 @@ export default function Hero({
           />
         </div>
       </div>
-      {showStats || trustStats?.length > 0 ? (
+      {trustStats?.length > 0 ? (
         <div className="absolute -bottom-16 left-1/2 z-20 flex w-[90%] max-w-4xl -translate-x-1/2 flex-col items-center justify-around gap-8 rounded-3xl bg-[#f8f5fd] p-8 shadow-sm md:flex-row">
-          {trustStats?.map((state) => {
+          {trustStats?.map((state, index) => {
+            console.log(state)
             return (
-              <div className="text-center">
+              <div key={index} className="text-center">
                 <h3 className="mb-2 text-4xl font-semibold text-purple-700">
                   {state.value}
                 </h3>

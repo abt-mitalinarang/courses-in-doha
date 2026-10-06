@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Toaster, type ToasterProps } from "sonner"
+import { Toaster, toast, type ToasterProps } from "sonner"
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -26,8 +26,8 @@ const Toast = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
+          "--normal-bg": "var(--popover-foreground)",
+          "--normal-text": "var(--popover)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
@@ -44,4 +44,4 @@ const Toast = ({ ...props }: ToasterProps) => {
 
 export { Toast }
 
-export { Toaster }
+export { Toaster, toast }

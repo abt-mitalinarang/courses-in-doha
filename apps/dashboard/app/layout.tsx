@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google"
 import "@repo/ui/styles/globals.css"
 import { Sidebar } from "@repo/registry"
+import { Toast } from "@repo/ui/components/sonner"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
         <main className="flex-1 overflow-y-auto">
           {children}
         </main>
+        <Toast />
       </body>
     </html>
   )
