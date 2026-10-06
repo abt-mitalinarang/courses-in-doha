@@ -1,0 +1,19 @@
+import type { Metadata } from "next";
+import { RootLayout } from "@repo/ui/components/root-layout";
+
+export const metadata: Metadata = {
+  title: "{{ titleCase name }}",
+  description: "{{ titleCase name }} application powered by Next.js in Acme Monorepo",
+};
+
+export default function Layout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <RootLayout>
+      {children}
+    </RootLayout>
+  );
+}

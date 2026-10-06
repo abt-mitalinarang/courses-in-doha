@@ -1,36 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google"
-
-import "@repo/ui/styles/globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@repo/registry"
+import { RootLayout } from "@repo/ui/components/root-layout"
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
-
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased`}
-    >
-      <body>
-        {/* <ThemeProvider> */}
-        <Header />
-        {children}
-        {/* </ThemeProvider> */}
-      </body>
-    </html>
+    <RootLayout>
+      {/* <ThemeProvider> */}
+      <Header />
+      {children}
+      {/* </ThemeProvider> */}
+    </RootLayout>
   )
 }

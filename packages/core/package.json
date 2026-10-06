@@ -12,7 +12,8 @@
     "@tanstack/react-table": "^9.2.5",
     "next": "16.3.6",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -26,6 +27,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./interface/*": "./src/interface/*"
+    "./interface/*": "./src/interface/*.ts",
+    "./schemas/*": "./src/schemas/*.ts"
   }
 }
