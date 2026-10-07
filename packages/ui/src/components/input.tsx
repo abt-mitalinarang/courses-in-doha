@@ -33,7 +33,11 @@ function Input({
         )}
         {...props}
       />
-      {error && <FieldDescription>{error}</FieldDescription>}
+      {error && (
+        <FieldDescription className="text-xs text-red-600">
+          {error}
+        </FieldDescription>
+      )}
     </Field>
   )
 }

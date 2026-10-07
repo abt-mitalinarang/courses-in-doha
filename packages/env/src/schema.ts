@@ -12,6 +12,10 @@ export const clientSchema = z.object({
     .string()
     .url()
     .default("https://preview-api.optiecommerce2026.shop"),
+  NEXT_PUBLIC_IMAGE_URL: z
+    .string()
+    .url()
+    .default("https://preview.optiecommerce2026.shop/"),
   NEXT_PUBLIC_STORE_SECRET_KEY: z.string().default("dfsgesrtgesrgddx"),
 })
 

@@ -4,6 +4,7 @@ const isServer = typeof window === "undefined"
 
 const _clientEnv = clientSchema.safeParse({
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_IMAGE_URL: process.env.NEXT_PUBLIC_IMAGE_URL,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NEXT_PUBLIC_STORE_SECRET_KEY: process.env.NEXT_PUBLIC_STORE_SECRET_KEY,
 })

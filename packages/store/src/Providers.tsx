@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { cartSlice } from "@repo/store";
-import { configureStore } from "@reduxjs/toolkit";
-import type { ReactNode } from "react";
-import { Provider } from "react-redux";
+import { adminSlice } from "@repo/store"
+import { configureStore } from "@reduxjs/toolkit"
+import type { ReactNode } from "react"
+import { Provider } from "react-redux"
 import {
   FLUSH,
   PAUSE,
@@ -13,38 +13,38 @@ import {
   REHYDRATE,
   persistReducer,
   persistStore,
-} from "redux-persist";
-import { PersistGate } from "redux-persist/integration/react";
-import storage from "redux-persist/lib/storage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { encryptTransform } from 'redux-persist-transform-encrypt';
+} from "redux-persist"
+import { PersistGate } from "redux-persist/integration/react"
+import storage from "redux-persist/lib/storage"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { encryptTransform } from "redux-persist-transform-encrypt"
 
-import { env } from "@repo/env";
+import { env } from "@repo/env"
 
-const encryptionKey = env.NEXT_PUBLIC_STORE_SECRET_KEY;
+const encryptionKey = env.NEXT_PUBLIC_STORE_SECRET_KEY
 
 const encryptedTransform = encryptTransform({
   secretKey: encryptionKey,
   onError(error: Error) {
-    console.error("[store] Decryption error — state reset:", error.message);
+    console.error("[store] Decryption error — state reset:", error.message)
   },
-});
+})
 
-const ICartPersistConfig = {
-  key: "cart",
+const IAdminPersistConfig = {
+  key: "admin",
   version: 1,
   storage,
   transforms: [encryptedTransform],
-};
+}
 
-const persistedCartReducer = persistReducer(
-  ICartPersistConfig,
-  cartSlice.reducer,
-);
+const persistedAdminReducer = persistReducer(
+  IAdminPersistConfig,
+  adminSlice.reducer
+)
 
 const persistedStore = configureStore({
   reducer: {
-    cart: persistedCartReducer,
+    admin: persistedAdminReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -52,16 +52,16 @@ const persistedStore = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
-});
+})
 
-const persistor = persistStore(persistedStore);
+const persistor = persistStore(persistedStore)
 
 interface IProvidersProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export default function Providers({ children }: IProvidersProps) {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient()
   return (
     <Provider store={persistedStore}>
       <PersistGate loading={null} persistor={persistor}>
@@ -70,5 +70,5 @@ export default function Providers({ children }: IProvidersProps) {
         </QueryClientProvider>
       </PersistGate>
     </Provider>
-  );
+  )
 }

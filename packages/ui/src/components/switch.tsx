@@ -10,7 +10,7 @@ function Switch({ className, ...props }: SwitchPrimitive.Root.Props) {
       className={cn(
         "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full",
         "bg-gray-500",
-        "data-checked:bg-black",
+        "data-checked:bg-green-400",
         className
       )}
     >

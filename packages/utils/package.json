@@ -1,17 +1,15 @@
 {
-  "name": "@repo/store",
+  "name": "@repo/utils",
   "version": "0.0.0",
   "private": true,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.tsx"
   },
   "scripts": {
     "lint": "eslint .",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/api": "workspace:*",
-    "@repo/ui": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "19.2.18",
@@ -21,14 +19,5 @@
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
-  },
-  "dependencies": {
-    "@reduxjs/toolkit": "^2.13.0",
-    "@repo/core": "workspace:*",
-    "@repo/env": "workspace:*",
-    "@tanstack/react-query": "^5.104.1",
-    "react-redux": "^9.3.0",
-    "redux-persist": "^6.0.0",
-    "redux-persist-transform-encrypt": "^5.1.1"
   }
 }

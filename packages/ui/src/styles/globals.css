@@ -15,8 +15,7 @@
   --popover-foreground: #0f172a;
   --primary: #204fbe;
   --primary-foreground: #f8fafc;
-
-  --secondary: #000000;
+  --danger: var(--destructive) --secondary: #000000;
   --secondary-foreground: #0f172a;
 
   --muted: #f1f5f9;

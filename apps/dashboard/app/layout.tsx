@@ -1,6 +1,7 @@
-import { Sidebar } from "@repo/registry"
+import { AdminSidebar } from "@repo/registry"
 import { Toast } from "@repo/ui/components/sonner"
 import { RootLayout } from "@repo/ui/components/root-layout"
+import { Providers } from "@repo/store"
 
 export default function Layout({
   children,
@@ -9,11 +10,11 @@ export default function Layout({
 }>) {
   return (
     <RootLayout className="flex">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
-      <Toast />
+      <Providers>
+        <AdminSidebar />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+        <Toast />
+      </Providers>
     </RootLayout>
   )
 }

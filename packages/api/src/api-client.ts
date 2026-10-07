@@ -16,6 +16,8 @@ export class ApiClient {
   private baseUrl: string
   private defaultHeaders: Record<string, string>
   private excludedAuthRoutes: string[]
+  private isRefreshing: boolean = false
+  private refreshPromise: Promise<boolean> | null = null
 
   constructor(config: IApiClientConfig = {}) {
     this.baseUrl = (config.baseUrl || "").replace(/\/$/, "")
@@ -37,9 +39,41 @@ export class ApiClient {
     )
   }
 
+  private async handleRefresh(): Promise<boolean> {
+    if (this.isRefreshing && this.refreshPromise) {
+      return this.refreshPromise
+    }
+
+    this.isRefreshing = true
+    this.refreshPromise = new Promise(async (resolve) => {
+      try {
+        const url = `${this.baseUrl}${API_ENDPOINTS.admin.refreshAdminToken}`
+        const response = await fetch(url, {
+          method: "GET",
+          headers: this.defaultHeaders,
+          credentials: "include",
+        })
+
+        if (!response.ok) {
+          resolve(false)
+        } else {
+          resolve(true)
+        }
+      } catch (error) {
+        resolve(false)
+      } finally {
+        this.isRefreshing = false
+        this.refreshPromise = null
+      }
+    })
+
+    return this.refreshPromise
+  }
+
   private async request<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
+    isRetry = false
   ): Promise<T> {
     const { params, headers, ...customConfig } = options
     let url = `${this.baseUrl}${endpoint?.startsWith("/") ? endpoint : `/${endpoint}`}`
@@ -68,6 +102,17 @@ export class ApiClient {
     try {
       const response = await fetch(url, config)
 
+      if (
+        response.status === 401 &&
+        !isRetry &&
+        !this.isExcludedRoute(endpoint)
+      ) {
+        const refreshed = await this.handleRefresh()
+        if (refreshed) {
+          return this.request<T>(endpoint, options, true)
+        }
+      }
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(
@@ -86,6 +131,7 @@ export class ApiClient {
         `API Request Failed: ${options.method || "GET"} ${url}`,
         error
       )
+
       throw error
     }
   }
@@ -111,10 +157,22 @@ export class ApiClient {
     body?: unknown,
     options?: RequestOptions
   ): Promise<T> {
+    console.log(body)
+    let formattedBody: BodyInit | undefined = undefined
+
+    if (body !== undefined && body !== null) {
+      if (typeof body === "string") {
+        formattedBody = body
+      } else if (body instanceof FormData || body instanceof URLSearchParams) {
+        formattedBody = body
+      } else {
+        formattedBody = JSON.stringify(body)
+      }
+    }
     return this.request<T>(endpoint, {
       ...options,
       method: "PUT",
-      body: JSON.stringify(body),
+      body: formattedBody,
     })
   }
 

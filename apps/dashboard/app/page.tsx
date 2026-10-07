@@ -1,27 +1,22 @@
 "use client"
 import Toolbar from "@/components/tool-bar"
 import { IHeroDetails } from "@repo/core"
-import { Hero } from "@repo/registry"
 import { getHeroDetails, updateHeroDetailsCookie } from "@repo/registry/actions"
+import { useGetAdminPagesDetails } from "@repo/store"
 import { Button } from "@repo/ui/components/button"
 import { toast } from "@repo/ui/components/sonner"
 import {
-  ArrowDown,
   ArrowLeft,
-  ArrowUp,
   ChevronDown,
   ChevronRight,
   ExternalLink,
   Globe,
-  GripHorizontal,
-  Layers,
   Layout,
   LayoutTemplate,
   Monitor,
   Search,
   Sidebar,
   Sun,
-  Trash2,
 } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -32,9 +27,9 @@ export default function Page() {
     CTA: [],
     trustStats: [],
   })
-  const [showStats, setShowStats] = useState(
-    (heroDetails?.trustStats?.length || 0) > 0 ? true : false
-  )
+
+  const { data } = useGetAdminPagesDetails()
+
   const getDetails = async () => {
     const details = await getHeroDetails()
     setHeroDetails(details)
@@ -49,38 +44,6 @@ export default function Page() {
     } catch (error) {
       toast.error("Failed to publish page")
     }
-  }
-  const SectionActions = () => {
-    const actions = [
-      {
-        Icon: ArrowUp,
-        className:
-          "flex h-6 w-6 items-center justify-center rounded border border-gray-200 bg-white shadow-sm hover:bg-gray-50",
-        iconClass: "h-3 w-3 text-gray-500",
-      },
-      {
-        Icon: ArrowDown,
-        className:
-          "flex h-6 w-6 items-center justify-center rounded border border-gray-200 bg-white shadow-sm hover:bg-gray-50",
-        iconClass: "h-3 w-3 text-gray-500",
-      },
-      {
-        Icon: Trash2,
-        className:
-          "flex h-6 w-8 items-center justify-center rounded bg-red-500 text-white shadow-sm hover:bg-red-600",
-        iconClass: "h-3 w-3",
-      },
-    ]
-
-    return (
-      <div className="absolute top-2 right-2 z-10 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        {actions.map(({ Icon, className, iconClass }, index) => (
-          <Button key={index} className={className}>
-            <Icon className={iconClass} />
-          </Button>
-        ))}
-      </div>
-    )
   }
 
   return (
@@ -151,8 +114,8 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 gap-6 p-6">
-        <div className="flex w-64 flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="flex min-h-0 flex-1 flex-wrap gap-6 p-6">
+        {/* <div className="flex w-64 flex-col rounded-lg border border-gray-200 bg-white shadow-sm">
           <div className="border-b border-gray-100 px-4 py-3">
             <h2 className="text-center text-sm font-semibold text-gray-800">
               Sections
@@ -181,8 +144,8 @@ export default function Page() {
               </div>
             </div>
           </div>
-        </div>
-
+        </div> */}
+        {/* 
         <div className="custom-scrollbar flex flex-1 flex-col overflow-y-auto rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
           <div className="mb-4 flex items-center justify-between border-b border-gray-100 pb-3">
             <div className="flex gap-1.5">
@@ -266,13 +229,10 @@ export default function Page() {
               </div>
             </div>
           </div>
-        </div>
-        <Toolbar
-          heroDetails={heroDetails}
-          setHeroDetails={setHeroDetails}
-          showStats={showStats}
-          setShowStats={setShowStats}
-        />
+        </div> */}
+        {data?.pages?.map((item) => {
+          return <Toolbar pageDetails={item} />
+        })}
       </div>
     </div>
   )

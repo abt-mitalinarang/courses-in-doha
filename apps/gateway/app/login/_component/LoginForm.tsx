@@ -8,8 +8,11 @@ import {
   TLoginForm,
   loginSchema,
 } from "@repo/core/schemas/gateway/login.schema"
-import { useAdminLoginMutation } from "@repo/store"
+import { useAdminLoginMutation, useAppDispatch } from "@repo/store"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { navigate, RoutesLink } from "@repo/utils"
+import { toast } from "@repo/ui/components/sonner"
 
 export default function LoginForm() {
   const loginMutation = useAdminLoginMutation()
@@ -21,10 +24,19 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   })
 
-  const OnSubmit = (data: TLoginForm) => {
+  const OnSubmit = async (data: TLoginForm) => {
     console.log(data)
-    loginMutation.mutate(data)
+    loginMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success("Login Scucessfully")
+        navigate(RoutesLink.admin.dashboard)
+      },
+      onError: () => {
+        toast.error("login failed")
+      },
+    })
   }
+
   return (
     <div className="relative z-10 mx-auto -mt-[100px] w-[90%] max-w-[480px] lg:absolute lg:top-[200px] lg:right-[120px] lg:mt-0 lg:w-[480px]">
       <Card className="rounded-[24px] bg-white p-8 lg:p-[50px]">
@@ -79,7 +91,9 @@ export default function LoginForm() {
           </div>
 
           <Button
+            disabled={Object(errors).length > 0}
             type="submit"
+            isLoading={loginMutation.isPending}
             className="mt-2 rounded-lg bg-[#0b8bf4] p-6 text-base font-semibold text-white shadow-[0_4px_12px_rgba(11,139,244,0.3)] transition-colors hover:bg-[#097ce0]"
           >
             Sign in
